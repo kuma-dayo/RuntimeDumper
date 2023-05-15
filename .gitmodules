@@ -1,0 +1,3 @@
+[submodule "vendor/simpleini"]
+	path = vendor/simpleini
+	url = https://github.com/brofield/simpleini
