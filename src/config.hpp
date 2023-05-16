@@ -127,7 +127,7 @@ namespace config
 					{
 						client_version = "Offset";
 					}
-					util::Logf("Version detected %s %s", client_version, str_match.c_str());
+					util::Logf("Version detected %s MD5: %s", client_version, str_match.c_str());
 					break;
 				}
 			}
