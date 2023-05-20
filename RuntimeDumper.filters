@@ -54,7 +54,7 @@
   <ItemGroup>
     <None Include=".gitignore" />
     <None Include=".gitmodules" />
-    <None Include="mhypbase.ini" />
+    <None Include="RuntimeDumper.ini" />
     <None Include="README.md" />
   </ItemGroup>
 </Project>

@@ -1,9 +1,9 @@
-# mhypbase
+# RuntimeDumper
 
 - This project focuses on improving the experience of private servers, not official servers.
-- This project is not a protocol emulation of the original `mhypbase.dll`, users should **NOT** use it to connect to official servers.
+- This project is not a protocol emulation of the original `RuntimeDumper.dll`, users should **NOT** use it to connect to official servers.
 
-The latest GitHub Action build artifact: [[file]](https://nightly.link/Jx2f/mhypbase/workflows/msbuild/main/mhypbase-latest.zip)
+The latest GitHub Action build artifact: [[file]](https://nightly.link/Jx2f/RuntimeDumper/workflows/msbuild/main/RuntimeDumper-latest.zip)
 
 ## Features
 
@@ -19,7 +19,7 @@ The latest GitHub Action build artifact: [[file]](https://nightly.link/Jx2f/mhyp
 
 ## FAQ
 
-> You can ask for help in [GitHub Discussions](https://github.com/Jx2f/mhypbase/discussions).
+> You can ask for help in [GitHub Discussions](https://github.com/Jx2f/RuntimeDumper/discussions).
 
 **Q: When do I use this project instead of `RSAPatch` or `Akebi-GC (RSAPatch)`?**
 

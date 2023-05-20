@@ -6,7 +6,7 @@ namespace util
 {
 	void Log(const char* text)
 	{
-		std::cout << "[mhypbase] " << text << std::endl;
+		std::cout << "[RuntimeDumper] " << text << std::endl;
 	}
 
 	void Logf(const char* fmt, ...)
@@ -26,7 +26,7 @@ namespace util
 	void Flogf(const char* fmt, ...)
 	{
 		if (!fout.is_open())
-			fout.open("mhypbase.log");
+			fout.open("RuntimeDumper.log");
 
 		char text[1024];
 
@@ -49,7 +49,7 @@ namespace util
 	{
 		char filename[MAX_PATH] = {};
 		GetModuleFileName(GetSelfModuleHandle(), filename, MAX_PATH);
-		auto path = std::filesystem::path(filename).parent_path() / "mhypbase.ini";
+		auto path = std::filesystem::path(filename).parent_path() / "RuntimeDumper.ini";
 		return path.string();
 	}
 
