@@ -182,6 +182,10 @@ namespace util
 		return 0;
 	}
 
+	void DumpCharp() {
+		uintptr_t baseAddress = (uintptr_t)GetModuleHandle("UserAssembly.dll");
+	}
+
 	void DumpAddress(uint32_t start, long magic_a, long magic_b)
 	{
 		uintptr_t baseAddress = (uintptr_t)GetModuleHandle("UserAssembly.dll");

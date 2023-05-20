@@ -18,6 +18,8 @@ namespace hook
 
 	void Load()
 	{
+		util::DumpCharp();
+
 		auto start = config::GetLongValue("TypeIndexStart", -1);
 		if (start > -1 && il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex != 0 &&
 			il2cpp__vm__Type__GetName != 0 && il2cpp__vm__Class__GetMethods != 0 && il2cpp__vm__Method__GetNameWithGenericTypes != 0)
