@@ -70,6 +70,7 @@ namespace util
 	{
 		AllocConsole();
 
+		freopen_s((FILE**)stdin, "CONIN$", "r", stdin);
 		freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
 		freopen_s((FILE**)stderr, "CONOUT$", "w", stderr);
 
@@ -77,6 +78,12 @@ namespace util
 		SetForegroundWindow(consoleWindow);
 		ShowWindow(consoleWindow, SW_RESTORE);
 		ShowWindow(consoleWindow, SW_SHOW);
+
+		SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE),
+			ENABLE_INSERT_MODE | ENABLE_EXTENDED_FLAGS |
+			ENABLE_PROCESSED_INPUT | ENABLE_QUICK_EDIT_MODE |
+			ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT
+		);
 	}
 
 	void DisableLogReport()
@@ -182,8 +189,19 @@ namespace util
 		return 0;
 	}
 
-	void DumpCharp() {
-		uintptr_t baseAddress = (uintptr_t)GetModuleHandle("UserAssembly.dll");
+	std::vector<std::string> split(const std::string& s, char delim)
+	{
+		std::vector<std::string> result;
+		std::stringstream ss(s);
+		std::string item;
+
+		while (std::getline(ss, item, delim))
+		{
+			if (!item.empty())
+				result.push_back(item);
+		}
+
+		return result;
 	}
 
 	void DumpAddress(uint32_t start, long magic_a, long magic_b)
@@ -194,6 +212,7 @@ namespace util
 			auto klass = il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex(i);
 			// &reinterpret_cast<uintptr_t*>(klass)[?] is a magic for klass->byval_arg
 			std::string class_name = il2cpp__vm__Type__GetName(&reinterpret_cast<uintptr_t*>(klass)[magic_a], 0);
+
 			util::Flogf("[%d]\n%s", i, class_name.c_str());
 			void* iter = 0;
 			while (const LPVOID method = il2cpp__vm__Class__GetMethods(klass, (LPVOID)&iter))
@@ -204,6 +223,7 @@ namespace util
 					method_address -= baseAddress;
 				std::string method_name = il2cpp__vm__Method__GetNameWithGenericTypes(method);
 				util::Flogf("\t0x%08X: %s", method_address, method_name.c_str());
+				//util::Flogf("\t0x%08X: ", method_address);
 			}
 			util::Flogf("");
 		}
