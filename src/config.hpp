@@ -17,7 +17,7 @@ namespace config
 	static const char* private_rsa_key;
 	static long magic_a;
 	static long magic_b;
-
+	static long magic_c;
 	bool GetEnableValue(const char* a_pKey, bool a_nDefault)
 	{
 		return ini.GetBoolValue("Basic", a_pKey, a_nDefault);
@@ -38,6 +38,10 @@ namespace config
 		return magic_b;
 	}
 
+	long GetMagicC()
+	{
+		return magic_c;
+	}
 	long GetOffsetValue(const char* a_pKey, long a_nDefault)
 	{
 		return ini.GetLongValue(client_version, a_pKey, a_nDefault);
@@ -134,6 +138,7 @@ namespace config
 		}
 		magic_a = ini.GetLongValue(client_version, "magic_a", 0);
 		magic_b = ini.GetLongValue(client_version, "magic_b", 0);
+		magic_c = ini.GetLongValue(client_version, "magic_c", 0);
 		config_channel = ini.GetValue("Value", "ConfigChannel", nullptr);
 		config_base_url = ini.GetValue("Value", "ConfigBaseUrl", nullptr);
 		public_rsa_key = ini.GetValue("Value", "PublicRSAKey", nullptr);

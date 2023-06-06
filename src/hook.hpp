@@ -19,7 +19,9 @@ namespace hook
 	void Load()
 	{
 
-            util::Log("Type 'dump' to RVA Dump\n");
+		util::Log("Type 'method' to RVA Dump\n");
+		util::Log("Type 'property' to property Dump\n");
+		std::cout << config::GetMagicC() << std::endl;
 
             while (true)
             {
@@ -30,12 +32,26 @@ namespace hook
                     continue;
                 auto nargs = cmd.size() - 1;
 
-				if (cmd[0] == "dump")
+				if (cmd[0] == "method")
 				{
 					auto start = config::GetLongValue("TypeIndexStart", -1);
 					if (start > -1 && il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex != 0 && il2cpp__vm__Type__GetName != 0 && il2cpp__vm__Class__GetMethods != 0 && il2cpp__vm__Method__GetNameWithGenericTypes != 0)
 					{
-						util::DumpAddress(start, config::GetMagicA(), config::GetMagicB());
+						util::DumpMethodAddress(start, config::GetMagicA(), config::GetMagicB());
+					}
+				}
+				else if (cmd[0] == "property")
+				{
+					auto start = config::GetLongValue("TypeIndexStart", -1);
+					if (start > -1 && il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex != 0 && il2cpp__vm__Property__GetName != 0 && il2cpp__vm__Class__GetProperties != 0)
+					{
+						util::DumpPropertyAddress(start, config::GetMagicA(), config::GetMagicB(), config::GetMagicC());
+					}
+				}
+				else if (cmd[0] == "check") {
+					if (il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex != 0 && il2cpp__vm__Property__GetName != 0 && il2cpp__vm__Class__GetProperties != 0)
+					{
+						util::checkPropertyName(config::GetMagicA(), config::GetMagicC());
 					}
 				}
                 else
