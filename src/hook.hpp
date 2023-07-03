@@ -64,7 +64,7 @@ namespace hook
 		}
 		else {
 			printf("magic_a = %ws\n", args[2]);
-			util::DumpMethodAddressTest(std::stol(args[2]));
+			util::DumpMethodAddressTest(std::stol(args[2]), config::client_version);
 		}
 	}
 }

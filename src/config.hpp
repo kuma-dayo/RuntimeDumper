@@ -10,11 +10,6 @@ namespace config
 	static CSimpleIni ini;
 
 	static const char* client_version;
-	static const char* config_channel;
-	static const char* config_base_url;
-	static const char* public_rsa_key;
-	static const char* rsa_encrypt_key;
-	static const char* private_rsa_key;
 	static long magic_a;
 	static long magic_b;
 	static long magic_c;
@@ -77,31 +72,6 @@ namespace config
 		return baseAddress + offset;
 	}
 
-	const char* GetConfigChannel()
-	{
-		return config_channel;
-	}
-
-	const char* GetConfigBaseUrl()
-	{
-		return config_base_url;
-	}
-
-	const char* GetPublicRSAKey()
-	{
-		return public_rsa_key;
-	}
-
-	const char* GetRSAEncryptKey()
-	{
-		return rsa_encrypt_key;
-	}
-
-	const char* GetPrivateRSAKey()
-	{
-		return private_rsa_key;
-	}
-
 	void Load()
 	{
 		ini.SetUnicode();
@@ -139,10 +109,5 @@ namespace config
 		magic_a = ini.GetLongValue(client_version, "magic_a", 0);
 		magic_b = ini.GetLongValue(client_version, "magic_b", 0);
 		magic_c = ini.GetLongValue(client_version, "magic_c", 0);
-		config_channel = ini.GetValue("Value", "ConfigChannel", nullptr);
-		config_base_url = ini.GetValue("Value", "ConfigBaseUrl", nullptr);
-		public_rsa_key = ini.GetValue("Value", "PublicRSAKey", nullptr);
-		rsa_encrypt_key = ini.GetValue("Value", "RSAEncryptKey", public_rsa_key);
-		private_rsa_key = ini.GetValue("Value", "PrivateRSAKey", nullptr);
 	}
 }

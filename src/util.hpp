@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pch.h"
+#include "config.hpp"
 
 namespace util
 {
@@ -263,13 +264,16 @@ namespace util
 		}
 	}
 
-	void DumpMethodAddressTest(long magic_a)
+	void DumpMethodAddressTest(long magic_a, const char* clientVersion)
 	{
 		auto klass = il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex(0);
-		std::cout << "il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex" << std::endl;
-
+		
 		std::string class_name = il2cpp__vm__Type__GetName(&reinterpret_cast<uintptr_t *>(klass)[magic_a], 0);
-		std::cout << class_name.c_str() << std::endl;
+
+		if (strcmp(class_name.c_str(), "<Module>") == 0) {
+			auto text = std::format("{} {}\n{} {}", "Succeeded in finding magic_a in version", clientVersion, "Magic_a:", magic_a);
+			MessageBoxA(nullptr, text.c_str(), "RuntimeDumper", MB_ICONASTERISK);
+		} 
 	}
 
 	void DumpMethodAddress(uint32_t start, long magic_a, long magic_b)
