@@ -1,7 +1,6 @@
 #pragma once
 
 #include "pch.h"
-#include "config.hpp"
 
 namespace util
 {
@@ -204,6 +203,17 @@ namespace util
 		return result;
 	}
 
+	void ReplaceAll(std::string& stringreplace, const std::string& origin, const std::string& dest)
+	{
+		size_t pos = 0;
+		size_t offset = 0;
+		size_t len = origin.length();
+		while ((pos = stringreplace.find(origin, offset)) != std::string::npos) {
+			stringreplace.replace(pos, len, dest);
+			offset = pos + dest.length();
+		}
+	}
+
 	typedef struct PropertyInfo
 	{
 		LPVOID *parent;
@@ -284,8 +294,9 @@ namespace util
 			auto klass = il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex(i);
 			// &reinterpret_cast<uintptr_t*>(klass)[?] is a magic for klass->byval_arg
 			std::string class_name = il2cpp__vm__Type__GetName(&reinterpret_cast<uintptr_t *>(klass)[magic_a], 0);
+			
+			util::Flogf("TypedefIndex: %d", i);
 
-			util::Flogf("[%d]\n%s", i, class_name.c_str());
 			void *iter = 0;
 			while (const LPVOID method = il2cpp__vm__Class__GetMethods(klass, (LPVOID)&iter))
 			{
@@ -294,9 +305,13 @@ namespace util
 				if (method_address)
 					method_address -= baseAddress;
 				std::string method_name = il2cpp__vm__Method__GetNameWithGenericTypes(method);
-				util::Flogf("\t0x%08X: %s", method_address, method_name.c_str());
+				util::ReplaceAll(class_name, ".", "::");
+				
+				util::Flogf("\t0x%08X: %s", method_address, std::format("{}::{}", class_name.c_str(), method_name.c_str()).c_str());
 			}
 			util::Flogf("");
 		}
 	}
+
+
 }

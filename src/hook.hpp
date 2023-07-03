@@ -23,9 +23,8 @@ namespace hook
 		auto args = CommandLineToArgvW(GetCommandLineW(), &nArgs);
 
 		if (!args[1]) {
-			util::Log("Type 'method' to RVA Dump\n");
-			util::Log("Type 'property' to property Dump\n");
-			std::cout << config::GetMagicC() << std::endl;
+			util::Log("Type 'method' to RVA Dump");
+			util::Log("Type 'property' to property Dump (WIP)\n");
 
 			while (true)
 			{
