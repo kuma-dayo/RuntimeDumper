@@ -3,9 +3,10 @@
 #include "pch.h"
 #include "hook-manager.h"
 #include "il2cpp-appdata.h"
-
+#include "Shellapi.h"
 #include "config.hpp"
 #include "util.hpp"
+#include <string>
 
 namespace hook
 {
@@ -18,19 +19,22 @@ namespace hook
 
 	void Load()
 	{
+		int nArgs;
+		auto args = CommandLineToArgvW(GetCommandLineW(), &nArgs);
 
-		util::Log("Type 'method' to RVA Dump\n");
-		util::Log("Type 'property' to property Dump\n");
-		std::cout << config::GetMagicC() << std::endl;
+		if (!args[1]) {
+			util::Log("Type 'method' to RVA Dump\n");
+			util::Log("Type 'property' to property Dump\n");
+			std::cout << config::GetMagicC() << std::endl;
 
-            while (true)
-            {
-                std::string input;
-                std::getline(std::cin, input);
-                auto cmd = util::split(input, ' ');
-                if (cmd.empty())
-                    continue;
-                auto nargs = cmd.size() - 1;
+			while (true)
+			{
+				std::string input;
+				std::getline(std::cin, input);
+				auto cmd = util::split(input, ' ');
+				if (cmd.empty())
+					continue;
+				auto nargs = cmd.size() - 1;
 
 				if (cmd[0] == "method")
 				{
@@ -54,9 +58,13 @@ namespace hook
 						util::checkPropertyName(config::GetMagicA(), config::GetMagicC());
 					}
 				}
-                else
-                    util::Log("Invalid command!\n");
-            }
-
+				else
+					util::Log("Invalid command!\n");
+			}
+		}
+		else {
+			printf("magic_a = %ws\n", args[2]);
+			util::DumpMethodAddressTest(std::stol(args[2]));
+		}
 	}
 }

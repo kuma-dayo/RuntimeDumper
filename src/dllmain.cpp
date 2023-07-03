@@ -10,7 +10,7 @@ DWORD WINAPI Thread(LPVOID lpParam)
 	config::Load();
 	util::DisableLogReport();
 	util::Log("Disabled log report.");
-
+	
 	while (GetModuleHandle("UserAssembly.dll") == nullptr)
 	{
 		util::Log("UserAssembly.dll isn't loaded, waiting for a sec.");
