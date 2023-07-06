@@ -249,7 +249,9 @@ namespace util
 		void *iter = 0;
 		while (const LPVOID property = il2cpp__vm__Class__GetProperties(klass, (LPVOID)&iter))
 		{
-			// todo
+			auto property_name_ptr = il2cpp__vm__Property__GetName(property);
+			std::string property_name = System__Runtime__InteropServices__Marshal__PtrToStringAnsi(property_name_ptr);
+			util::Log(property_name.c_str())
 		}
 	}
 
@@ -267,9 +269,9 @@ namespace util
 			void *iter = 0;
 			while (const LPVOID property = il2cpp__vm__Class__GetProperties(klass, (LPVOID)&iter))
 			{
-				// Can't find il2cpp__vm__Property__GetName
-				//  std::string property_name = il2cpp__vm__Property__GetName(property);
-				//  util::Flogf("%s",property_name);
+				LPVOID property_name_ptr = il2cpp__vm__Property__GetName(property);
+				std::string property_name = System__Runtime__InteropServices__Marshal__PtrToStringAnsi(property_name_ptr);
+				util::Flogf("%s",property_name.c_str());
 			}
 		}
 	}

@@ -6,4 +6,6 @@ DO_API(0, LPVOID, il2cpp__vm__Class__GetMethods, (LPVOID klass, LPVOID iter));
 DO_API(0, std::string, il2cpp__vm__Method__GetNameWithGenericTypes, (LPVOID method));
 
 DO_API(0, LPVOID, il2cpp__vm__Class__GetProperties, (LPVOID klass, LPVOID iter));
-DO_API(0, std::string, il2cpp__vm__Property__GetName, (LPVOID prop));
+DO_API(0, LPVOID, il2cpp__vm__Property__GetName, (LPVOID prop));
+
+DO_API(0, std::string, System__Runtime__InteropServices__Marshal__PtrToStringAnsi, (LPVOID ptr))
