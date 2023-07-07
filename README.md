@@ -12,7 +12,7 @@
 ## How to use?
 
 - Download dll from release or compile it (**as Release**) yourself
-- Rename it to `version.dll` or `mhypbase.dll` and put it in the same folder as the game
+- Rename it to `version.dll` and put it in the same folder as the game
 
 ## Credit
 

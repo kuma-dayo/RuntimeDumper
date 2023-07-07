@@ -12,7 +12,7 @@ namespace config
 	static const char* client_version;
 	static long magic_a;
 	static long magic_b;
-	static long magic_c;
+
 	bool GetEnableValue(const char* a_pKey, bool a_nDefault)
 	{
 		return ini.GetBoolValue("Basic", a_pKey, a_nDefault);
@@ -33,10 +33,6 @@ namespace config
 		return magic_b;
 	}
 
-	long GetMagicC()
-	{
-		return magic_c;
-	}
 	long GetOffsetValue(const char* a_pKey, long a_nDefault)
 	{
 		return ini.GetLongValue(client_version, a_pKey, a_nDefault);
@@ -74,6 +70,11 @@ namespace config
 
 	void Load()
 	{
+		if (!std::filesystem::is_regular_file(util::GetConfigPath().c_str())) {
+			util::Log("RuntimeDumper.ini not found\n");
+			return;
+		}
+
 		ini.SetUnicode();
 		ini.LoadFile(util::GetConfigPath().c_str());
 		if (GetEnableValue("EnableConsole", false))
@@ -108,6 +109,5 @@ namespace config
 		}
 		magic_a = ini.GetLongValue(client_version, "magic_a", 0);
 		magic_b = ini.GetLongValue(client_version, "magic_b", 0);
-		magic_c = ini.GetLongValue(client_version, "magic_c", 0);
 	}
 }

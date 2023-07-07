@@ -214,16 +214,6 @@ namespace util
 		}
 	}
 
-	typedef struct PropertyInfo
-	{
-		LPVOID *parent;
-		const char *name;
-		const LPVOID *get;
-		const LPVOID *set;
-		uint32_t attrs;
-		uint32_t token;
-	} PropertyInfo;
-
 	bool IsValidName(const char *name)
 	{
 		if (name == nullptr)
@@ -238,45 +228,7 @@ namespace util
 		return true;
 	}
 
-	void checkPropertyName(long magic_a, long magic_c)
-	{
-		uintptr_t baseAddress = (uintptr_t)GetModuleHandle("UserAssembly.dll");
-		auto klass = il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex(9);
-		std::string class_name = il2cpp__vm__Type__GetName(&reinterpret_cast<uintptr_t *>(klass)[magic_a], 0);
-
-		util::Log(class_name.c_str());
-
-		void *iter = 0;
-		while (const LPVOID property = il2cpp__vm__Class__GetProperties(klass, (LPVOID)&iter))
-		{
-			auto property_name_ptr = il2cpp__vm__Property__GetName(property);
-			std::string property_name = System__Runtime__InteropServices__Marshal__PtrToStringAnsi(property_name_ptr);
-			util::Log(property_name.c_str())
-		}
-	}
-
-	void DumpPropertyAddress(uint32_t start, long magic_a, long magic_b, long magic_c)
-	{
-		uintptr_t baseAddress = (uintptr_t)GetModuleHandle("UserAssembly.dll");
-		for (uint32_t i = start;; i++)
-		{
-			auto klass = il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex(i);
-
-			std::string class_name = il2cpp__vm__Type__GetName(&reinterpret_cast<uintptr_t *>(klass)[magic_a], 0);
-
-			util::Flogf("[%d]\n%s", i, class_name.c_str());
-
-			void *iter = 0;
-			while (const LPVOID property = il2cpp__vm__Class__GetProperties(klass, (LPVOID)&iter))
-			{
-				LPVOID property_name_ptr = il2cpp__vm__Property__GetName(property);
-				std::string property_name = System__Runtime__InteropServices__Marshal__PtrToStringAnsi(property_name_ptr);
-				util::Flogf("%s",property_name.c_str());
-			}
-		}
-	}
-
-	void DumpMethodAddressTest(long magic_a, const char* clientVersion)
+	void CheckMethodAddress(long magic_a, const char* clientVersion)
 	{
 		auto klass = il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex(0);
 		
