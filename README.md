@@ -8,6 +8,7 @@
   - OSRELWin3.7.0
   - OSCBWin3.7.50
   - OSRELWin3.8.0
+  - OSCBWin3.8.50
 
 ## How to use?
 
