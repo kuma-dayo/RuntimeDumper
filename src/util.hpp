@@ -1,9 +1,12 @@
 #pragma once
 
 #include "pch.h"
+#include "il2cpp-type.hpp"
 
 namespace util
 {
+	const char* client_version;
+
 	void Log(const char *text)
 	{
 		std::cout << "[RuntimeDumper] " << text << std::endl;
@@ -21,12 +24,14 @@ namespace util
 		Log(text);
 	}
 
-	std::ofstream fout;
+	std::map<std::string, std::ofstream> foutMap;
 
-	void Flogf(const char *fmt, ...)
+	void Flogf(const char* name, const char* fmt, ...)
 	{
+		std::ofstream& fout = foutMap[name];
+		
 		if (!fout.is_open())
-			fout.open("RuntimeDumper.log");
+			fout.open(std::format("RuntimeDumper-{}-{}Dump.log", client_version, name).c_str());
 
 		char text[1024];
 
@@ -228,42 +233,65 @@ namespace util
 		return true;
 	}
 
-	void CheckMethodAddress(long magic_a, const char* clientVersion)
+	void DumpField(uint32_t start, long byval_arg_magic) {
+		uintptr_t baseAddress = (uintptr_t)GetModuleHandle("UserAssembly.dll");
+		for (uint32_t i = start;; i++)
+		{
+			auto klass = il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex(i);
+			// &reinterpret_cast<uintptr_t*>(klass)[?] is a magic for klass->byval_arg
+			std::string class_name = il2cpp__vm__Type__GetName(&reinterpret_cast<uintptr_t*>(klass)[byval_arg_magic], 0);
+
+			util::Flogf("Field", "TypedefIndex: %d", i);
+
+			void* iter = 0;
+			while (const LPVOID field = il2cpp__vm__Class_GetFields(klass, (LPVOID)&iter))
+			{
+				auto field_name_ptr = Marshal__PtrToStringAnsi(il2cpp__vm__Field__GetName(klass));
+				auto field_name = reinterpret_cast<String*>(IntPtr__ToPointer(field_name_ptr));
+				std::cout << field_name->c_str() << std::endl;
+				Marshal__FreeHGlobal(field_name_ptr);
+
+			}
+			util::Flogf("Field", "");
+		}
+	}
+	void CheckByvalArgMagic(long byval_arg_magic, const char* clientVersion)
 	{
 		auto klass = il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex(0);
 		
-		std::string class_name = il2cpp__vm__Type__GetName(&reinterpret_cast<uintptr_t *>(klass)[magic_a], 0);
+		std::string class_name = il2cpp__vm__Type__GetName(&reinterpret_cast<uintptr_t *>(klass)[byval_arg_magic], 0);
 
 		if (strcmp(class_name.c_str(), "<Module>") == 0) {
-			auto text = std::format("{} {}\n{} {}", "Succeeded in finding magic_a in version", clientVersion, "Magic_a:", magic_a);
+			auto text = std::format("{} {}\n{} {}", "Succeeded in finding magic_a in version", clientVersion, "byval_arg_magic:", byval_arg_magic);
 			MessageBoxA(nullptr, text.c_str(), "RuntimeDumper", MB_ICONASTERISK);
 		} 
 	}
 
-	void DumpMethodAddress(uint32_t start, long magic_a, long magic_b)
+	void DumpMethod(uint32_t start, long byval_arg_magic, long method_pointer_magic)
 	{
 		uintptr_t baseAddress = (uintptr_t)GetModuleHandle("UserAssembly.dll");
 		for (uint32_t i = start;; i++)
 		{
 			auto klass = il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex(i);
 			// &reinterpret_cast<uintptr_t*>(klass)[?] is a magic for klass->byval_arg
-			std::string class_name = il2cpp__vm__Type__GetName(&reinterpret_cast<uintptr_t *>(klass)[magic_a], 0);
+			std::string class_name = il2cpp__vm__Type__GetName(&reinterpret_cast<uintptr_t *>(klass)[byval_arg_magic], 0);
 			
-			util::Flogf("TypedefIndex: %d", i);
+			util::Flogf("Method","TypedefIndex: %d", i);
 
 			void *iter = 0;
+			
 			while (const LPVOID method = il2cpp__vm__Class__GetMethods(klass, (LPVOID)&iter))
 			{
 				// &reinterpret_cast<uintptr_t*>(method)[?] is a magic for method->methodPointer
-				auto method_address = reinterpret_cast<uintptr_t *>(method)[magic_b];
+				auto method_address = reinterpret_cast<uintptr_t *>(method)[method_pointer_magic];
 				if (method_address)
 					method_address -= baseAddress;
 				std::string method_name = il2cpp__vm__Method__GetNameWithGenericTypes(method);
 				util::ReplaceAll(class_name, ".", "::");
 				
-				util::Flogf("\t0x%08X: %s", method_address, std::format("{}::{}", class_name.c_str(), method_name.c_str()).c_str());
+				util::Flogf("Method","\t0x%08X: %s", method_address, std::format("{}::{}", class_name.c_str(), method_name.c_str()).c_str());
 			}
-			util::Flogf("");
+			util::Flogf("Method", "");
 		}
 	}
 

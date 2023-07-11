@@ -21,10 +21,11 @@ namespace hook
 	{
 		int nArgs;
 		auto args = CommandLineToArgvW(GetCommandLineW(), &nArgs);
-
+		util::client_version = config::client_version;
 		if (!args[1])
 		{
 			util::Log("Type 'method' to method RVA Dump");
+			util::Log("Type 'field' to field Dump");
 
 			while (true)
 			{
@@ -38,19 +39,42 @@ namespace hook
 				if (cmd[0] == "method")
 				{
 					auto start = config::GetLongValue("TypeIndexStart", -1);
-					if (start > -1 && il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex != 0 && il2cpp__vm__Type__GetName != 0 && il2cpp__vm__Class__GetMethods != 0 && il2cpp__vm__Method__GetNameWithGenericTypes != 0)
+					if (
+						start > -1 && 
+						il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex != 0 && 
+						il2cpp__vm__Type__GetName != 0 && 
+						il2cpp__vm__Class__GetMethods != 0 && 
+						il2cpp__vm__Method__GetNameWithGenericTypes != 0
+						)
 					{
-						util::DumpMethodAddress(start, config::GetMagicA(), config::GetMagicB());
+						util::DumpMethod(start, config::GetByvalArgMagic(), config::GetMethodpointerMagic());
+					}
+				}
+				else if (cmd[0] == "field")
+				{
+					auto start = config::GetLongValue("TypeIndexStart", -1);
+					if (
+						start > -1 &&
+						il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex != 0 &&
+						il2cpp__vm__Type__GetName != 0 &&
+						il2cpp__vm__Class_GetFields != 0
+						)
+					{
+						util::DumpField(start, config::GetByvalArgMagic());
 					}
 				}
 				else
 					util::Log("Invalid command!\n");
 			}
 		}
+		else if (wcscmp(args[1], L"-magicA") == 0)
+		{
+			printf("ByvalArg = %ws\n", args[2]);
+			util::CheckByvalArgMagic(std::stol(args[2]), config::client_version);
+		}
 		else
 		{
-			printf("magic_a = %ws\n", args[2]);
-			util::CheckMethodAddress(std::stol(args[2]), config::client_version);
+			printf("what? %ws", args[1]);
 		}
 	}
 }

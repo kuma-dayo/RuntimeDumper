@@ -9,36 +9,36 @@ namespace config
 {
 	static CSimpleIni ini;
 
-	static const char* client_version;
-	static long magic_a;
-	static long magic_b;
+	static const char *client_version;
+	static long byval_arg;
+	static long method_pointer;
 
-	bool GetEnableValue(const char* a_pKey, bool a_nDefault)
+	bool GetEnableValue(const char *a_pKey, bool a_nDefault)
 	{
 		return ini.GetBoolValue("Basic", a_pKey, a_nDefault);
 	}
 
-	long GetLongValue(const char* a_pKey, long a_nDefault)
+	long GetLongValue(const char *a_pKey, long a_nDefault)
 	{
 		return ini.GetLongValue("Basic", a_pKey, a_nDefault);
 	}
 
-	long GetMagicA()
+	long GetByvalArgMagic()
 	{
-		return magic_a;
+		return byval_arg;
 	}
 
-	long GetMagicB()
+	long GetMethodpointerMagic()
 	{
-		return magic_b;
+		return method_pointer;
 	}
 
-	long GetOffsetValue(const char* a_pKey, long a_nDefault)
+	long GetOffsetValue(const char *a_pKey, long a_nDefault)
 	{
 		return ini.GetLongValue(client_version, a_pKey, a_nDefault);
 	}
 
-	uintptr_t GetAddress(uintptr_t baseAddress, const char* a_pKey, long a_nDefault)
+	uintptr_t GetAddress(uintptr_t baseAddress, const char *a_pKey, long a_nDefault)
 	{
 		auto offset = GetOffsetValue(a_pKey, a_nDefault);
 		if (offset == 0)
@@ -62,7 +62,8 @@ namespace config
 				}
 			}
 		}
-		if (offset) {
+		if (offset)
+		{
 			util::Logf("[%s] %s = 0x%08X", client_version, a_pKey, offset);
 		}
 		return baseAddress + offset;
@@ -70,7 +71,8 @@ namespace config
 
 	void Load()
 	{
-		if (!std::filesystem::is_regular_file(util::GetConfigPath().c_str())) {
+		if (!std::filesystem::is_regular_file(util::GetConfigPath().c_str()))
+		{
 			util::Log("RuntimeDumper.ini not found\n");
 			return;
 		}
@@ -107,7 +109,7 @@ namespace config
 				}
 			}
 		}
-		magic_a = ini.GetLongValue(client_version, "magic_a", 0);
-		magic_b = ini.GetLongValue(client_version, "magic_b", 0);
+		byval_arg = ini.GetLongValue(client_version, "byvalArg", 0);
+		method_pointer = ini.GetLongValue(client_version, "methodPointer", 0);
 	}
 }
