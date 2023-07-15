@@ -1,7 +1,6 @@
 #pragma once
 
 #include "pch.h"
-#include "il2cpp-type.hpp"
 
 namespace util
 {
@@ -246,11 +245,10 @@ namespace util
 			void* iter = 0;
 			while (const LPVOID field = il2cpp__vm__Class_GetFields(klass, (LPVOID)&iter))
 			{
-				auto field_name_ptr = Marshal__PtrToStringAnsi(il2cpp__vm__Field__GetName(klass));
-				auto field_name = reinterpret_cast<String*>(IntPtr__ToPointer(field_name_ptr));
-				std::cout << field_name->c_str() << std::endl;
-				Marshal__FreeHGlobal(field_name_ptr);
 
+				auto field_name = il2cpp__vm__Field__GetName(field);
+
+				util::Flogf("Field", "%s", field_name);
 			}
 			util::Flogf("Field", "");
 		}
@@ -264,7 +262,10 @@ namespace util
 		if (strcmp(class_name.c_str(), "<Module>") == 0) {
 			auto text = std::format("{} {}\n{} {}", "Succeeded in finding magic_a in version", clientVersion, "byval_arg_magic:", byval_arg_magic);
 			MessageBoxA(nullptr, text.c_str(), "RuntimeDumper", MB_ICONASTERISK);
-		} 
+		}
+		else {
+			exit(-1);
+		}
 	}
 
 	void DumpMethod(uint32_t start, long byval_arg_magic, long method_pointer_magic)
@@ -275,7 +276,7 @@ namespace util
 			auto klass = il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex(i);
 			// &reinterpret_cast<uintptr_t*>(klass)[?] is a magic for klass->byval_arg
 			std::string class_name = il2cpp__vm__Type__GetName(&reinterpret_cast<uintptr_t *>(klass)[byval_arg_magic], 0);
-			
+
 			util::Flogf("Method","TypedefIndex: %d", i);
 
 			void *iter = 0;
