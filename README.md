@@ -13,7 +13,7 @@
 ## How to use?
 
 - Download dll from release or compile it (**as Release**) yourself
-- Rename it to `version.dll` and put it in the same folder as the game
+- Rename it to `mhypbase.dll` or Use [VersionShim](https://github.com/Xpl0itR/VersionShim) to inject the dll
 
 ## Credit
 
