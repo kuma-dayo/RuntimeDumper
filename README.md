@@ -10,6 +10,7 @@
   - OSRELWin3.8.0
   - OSCBWin3.8.50
   - OSCBWin3.8.51
+  - OSCBWin3.8.52
 
 ## How to use?
 
