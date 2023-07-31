@@ -11,6 +11,8 @@
   - OSCBWin3.8.50
   - OSCBWin3.8.51
   - OSCBWin3.8.52
+  - OSCBWin3.8.53
+  - OSCBWin3.8.54
 
 ## How to use?
 
