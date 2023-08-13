@@ -1,3 +1,7 @@
+# This project will not be updated
+I am working on a new project that dumps dump.cs and stringLiteral.
+If you want to know about new projects please send me dm
+
 # RuntimeDumper
 
 - Tool to dump method RVA address for certain anime game
